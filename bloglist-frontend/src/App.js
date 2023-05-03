@@ -38,20 +38,25 @@ const App = () => {
 
   return (
     <>
-      <LoginForm
-        username={username}
-        setUsername={setUsername}
-        pasword={password}
-        setPassword={setPassword}
-        handleLogin={handleLogin}
-        errorMessage={errorMessage}
-      />
-      <div>
-        <h2>blogs</h2>
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
-        )}
-      </div>
+      { !user 
+        ?
+        <LoginForm
+          username={username}
+          setUsername={setUsername}
+          pasword={password}
+          setPassword={setPassword}
+          handleLogin={handleLogin}
+          errorMessage={errorMessage}
+        />
+        :
+        <div>
+          <h2>blogs</h2>
+          <p>{user.username} logged in</p>
+          {blogs.map(blog =>
+            <Blog key={blog.id} blog={blog} />
+          )}
+        </div>
+    }
     </>
   )
 }
