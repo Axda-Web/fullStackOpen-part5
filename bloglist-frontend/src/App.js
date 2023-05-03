@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
+import loginService from './services/login'
 
 import LoginForm from './components/LoginForm'
 
@@ -8,6 +9,8 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -15,9 +18,22 @@ const App = () => {
     )  
   }, [])
 
-  const handleLogin = e => {
+  const handleLogin = async (e) => {
     e.preventDefault()
-    console.log({username, password})
+    try {
+      const user = await loginService.login({
+        username,
+        password
+      })
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    } catch(exception) {
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
   }
 
   return (
@@ -28,6 +44,7 @@ const App = () => {
         pasword={password}
         setPassword={setPassword}
         handleLogin={handleLogin}
+        errorMessage={errorMessage}
       />
       <div>
         <h2>blogs</h2>
