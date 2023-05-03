@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 
 import LoginForm from './components/LoginForm'
+import NewBlogForm from './components/NewBlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -11,6 +12,7 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [user, setUser] = useState(null)
+  const [newBlog, setNewBlog] = useState({title: '', author: '', url: ''})
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -36,7 +38,7 @@ const App = () => {
       })
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
-      ) 
+      )
       setUser(user)
       setUsername('')
       setPassword('')
@@ -51,6 +53,23 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
+  }
+
+  const handleCreateNewBlog = async (e) => {
+    e.preventDefault()
+    try {
+      const returnedBlog = await blogService.create(newBlog, blogService.setToken(user.token))
+      setBlogs(prevState => ([
+        ...prevState,
+        returnedBlog
+      ]))
+      setNewBlog({title: '', author: '', url: ''})
+    } catch(exception) {
+      setErrorMessage('Something went wrong... Try again')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
   }
 
   return (
@@ -70,6 +89,11 @@ const App = () => {
           <h2>blogs</h2>
           <p>{user.username} logged in</p>
           <button onClick={handleLogout}>Logout</button>
+          <NewBlogForm
+            newBlog={newBlog}
+            setNewBlog={setNewBlog}
+            handleCreateNewBlog={handleCreateNewBlog}
+          />
           {blogs.map(blog =>
             <Blog key={blog.id} blog={blog} />
           )}
