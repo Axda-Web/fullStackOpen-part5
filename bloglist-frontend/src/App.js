@@ -105,7 +105,7 @@ const App = () => {
           <Notification message={successMessage} classes="notification notification--success"/>
           <p>{user.username} logged in</p>
           <button onClick={handleLogout}>Logout</button>
-          <Togglable buttonLabel="new blog" ref={newBlogFormRef}>
+          <Togglable buttonLabel="create new blog" ref={newBlogFormRef}>
             <NewBlogForm
               handleSubmitNewBlog={handleSubmitNewBlog}
             />
