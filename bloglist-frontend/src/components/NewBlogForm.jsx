@@ -1,8 +1,10 @@
+import { useState } from 'react'
+
 const NewBlogForm = ({
-        newBlog,
-        setNewBlog,
-        handleCreateNewBlog
+        handleSubmitNewBlog
     }) => {
+
+    const [newBlog, setNewBlog] = useState({title: '', author: '', url: ''})
 
     const handleInputChange = (e) => {
         const { value, name } = e.target
@@ -12,11 +14,17 @@ const NewBlogForm = ({
         }))
     }
 
+    const addBlog = (event) => {
+        event.preventDefault()
+        handleSubmitNewBlog(newBlog)
+        setNewBlog({title: '', author: '', url: ''})
+      }
+
   return (
     <section>
         <h2>Create new</h2>
         <form
-            onSubmit={handleCreateNewBlog}
+            onSubmit={addBlog}
             style={{
                 display: "flex",
                 flexDirection: "column",
