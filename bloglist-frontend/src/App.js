@@ -1,12 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './index.css'
-import Blog from './components/Blog'
+
 import blogService from './services/blogs'
 import loginService from './services/login'
 
+import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -15,7 +17,8 @@ const App = () => {
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null)
   const [user, setUser] = useState(null)
-  const [newBlog, setNewBlog] = useState({title: '', author: '', url: ''})
+
+  const newBlogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -62,15 +65,14 @@ const App = () => {
     setUser(null)
   }
 
-  const handleCreateNewBlog = async (e) => {
-    e.preventDefault()
+  const handleSubmitNewBlog = async (newBlog) => {
+    newBlogFormRef.current.toggleVisibility()
     try {
       const returnedBlog = await blogService.create(newBlog, blogService.setToken(user.token))
       setBlogs(prevState => ([
         ...prevState,
         returnedBlog
       ]))
-      setNewBlog({title: '', author: '', url: ''})
       setSuccessMessage(`A new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
       setTimeout(() => {
         setSuccessMessage(null)
@@ -103,13 +105,11 @@ const App = () => {
           <Notification message={successMessage} classes="notification notification--success"/>
           <p>{user.username} logged in</p>
           <button onClick={handleLogout}>Logout</button>
-          <NewBlogForm
-            newBlog={newBlog}
-            setNewBlog={setNewBlog}
-            handleCreateNewBlog={handleCreateNewBlog}
-            errorMessage={errorMessage}
-            successMessage={successMessage}
-          />
+          <Togglable buttonLabel="new blog" ref={newBlogFormRef}>
+            <NewBlogForm
+              handleSubmitNewBlog={handleSubmitNewBlog}
+            />
+          </Togglable>
           {blogs.map(blog =>
             <Blog key={blog.id} blog={blog} />
           )}
