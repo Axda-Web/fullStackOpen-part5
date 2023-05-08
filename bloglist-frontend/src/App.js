@@ -85,6 +85,27 @@ const App = () => {
     }
   }
 
+  const handleLikeClick = async (id) => {
+
+    const blogToUpdate = blogs.find( blog => blog.id === id)
+    const updatedBlog = {...blogToUpdate, likes: ++blogToUpdate.likes}
+
+    try {
+      const returnedUpdatedBlog = await blogService.update(id, updatedBlog, blogService.setToken(user.token))
+      setBlogs(blogs.map(blog => (blog.id === id ? returnedUpdatedBlog : blog)))
+      setSuccessMessage(`Blog ${returnedUpdatedBlog.title} updated`)
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 5000)
+    } catch(exception) {
+      setErrorMessage('Something went wrong... Try again')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
+
   return (
     <>
       { !user 
@@ -111,7 +132,7 @@ const App = () => {
             />
           </Togglable>
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog?.id} blog={blog} handleLikeClick={() => handleLikeClick(blog?.id)} />
           )}
         </div>
     }

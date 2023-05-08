@@ -34,8 +34,14 @@ router.post('/', userExtractor, async (request, response) => {
   response.status(201).json(createdBlog)
 })
 
-router.put('/:id', async (request, response) => {
+router.put('/:id', userExtractor, async (request, response) => {
   const { title, url, author, likes } = request.body
+
+  const user = request.user
+
+  if (!user) {
+    return response.status(401).json({ error: 'operation not permitted' })
+  }
 
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id,  { title, url, author, likes }, { new: true })
 
