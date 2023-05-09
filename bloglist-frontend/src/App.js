@@ -107,6 +107,26 @@ const App = () => {
     }
   }
 
+  const handleBlogDelete = async (blogToRemove) => {
+    if (!window.confirm(`Remove blog ${blogToRemove.title} by ${blogToRemove.author}`)) {
+      return;
+    }
+    try {
+      await blogService.remove(blogToRemove.id, blogService.setToken(user.token))
+      const updatedBlogs = blogs.filter(blog => blog.id !== blogToRemove.id)
+      setBlogs(updatedBlogs)
+      setSuccessMessage(`Blog ${blogToRemove.title} deleted`)
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 5000)
+    } catch(exception) {
+      setErrorMessage('Something went wrong... Try again')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
 
   return (
     <>
@@ -134,7 +154,13 @@ const App = () => {
             />
           </Togglable>
           {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-            <Blog key={blog.id} blog={blog} handleBlogUpdate={handleBlogUpdate} />
+            <Blog
+              key={blog.id}
+              blog={blog}
+              handleBlogUpdate={handleBlogUpdate}
+              handleBlogDelete={handleBlogDelete}
+              showRemoveBtn={blog.user.username === user.username}
+            />
           )}
         </div>
     }
