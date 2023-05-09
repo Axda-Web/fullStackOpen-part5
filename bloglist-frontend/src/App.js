@@ -85,6 +85,29 @@ const App = () => {
     }
   }
 
+  const handleBlogUpdate = async (updatedBlog) => {
+
+    try {
+      const returnedUpddatedBlog = await blogService.update(updatedBlog.id, updatedBlog, blogService.setToken(user.token))
+      if (returnedUpddatedBlog.title) {
+        const updatedBlogs = blogs.map(blog => (blog.id === returnedUpddatedBlog.id ? returnedUpddatedBlog : blog))
+        setBlogs(updatedBlogs)
+        setSuccessMessage(`Blog ${returnedUpddatedBlog.title} updated`)
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 5000)
+      } else {
+        throw new Error()
+      }
+    } catch(exception) {
+      setErrorMessage('You are not authorized to update this item')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
+
   return (
     <>
       { !user 
@@ -111,7 +134,7 @@ const App = () => {
             />
           </Togglable>
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} handleBlogUpdate={handleBlogUpdate} />
           )}
         </div>
     }
