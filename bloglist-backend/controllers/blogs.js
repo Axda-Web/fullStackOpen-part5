@@ -35,17 +35,26 @@ router.post('/', userExtractor, async (request, response) => {
 })
 
 router.put('/:id', userExtractor, async (request, response) => {
-  const { title, url, author, likes } = request.body
-
+  const body = request.body
   const user = request.user
+  const blogToUpdate = await Blog.findById(request.params.id)
+  const blog = {
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes || 0
+  }
 
   if (!user) {
     return response.status(401).json({ error: 'operation not permitted' })
   }
 
-  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id,  { title, url, author, likes }, { new: true })
-
-  response.json(updatedBlog)
+  if (user._id.toString() === blogToUpdate.user.toString()) {
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+    response.json(updatedBlog)
+  } else {
+    return response.status(401).json({ error: 'Not allowed', message: 'You are not authorized to update this item' })
+  }
 })
 
 router.delete('/:id', userExtractor, async (request, response) => {

@@ -28,7 +28,7 @@ const update = async (id, updatedBlog, token) => {
     }
   }
 
-  const response = axios.put(`${baseUrl}/${id}`, updatedBlog, config)
+  const response = await axios.put(`${baseUrl}/${id}`, updatedBlog, config)
 
   return response.data
 }

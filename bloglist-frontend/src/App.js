@@ -85,20 +85,22 @@ const App = () => {
     }
   }
 
-  const handleLikeClick = async (id) => {
-
-    const blogToUpdate = blogs.find( blog => blog.id === id)
-    const updatedBlog = {...blogToUpdate, likes: ++blogToUpdate.likes}
+  const handleBlogUpdate = async (updatedBlog) => {
 
     try {
-      const returnedUpdatedBlog = await blogService.update(id, updatedBlog, blogService.setToken(user.token))
-      setBlogs(blogs.map(blog => (blog.id === id ? returnedUpdatedBlog : blog)))
-      setSuccessMessage(`Blog ${returnedUpdatedBlog.title} updated`)
-      setTimeout(() => {
-        setSuccessMessage(null)
-      }, 5000)
+      const returnedUpddatedBlog = await blogService.update(updatedBlog.id, updatedBlog, blogService.setToken(user.token))
+      if (returnedUpddatedBlog.title) {
+        const updatedBlogs = blogs.map(blog => (blog.id === returnedUpddatedBlog.id ? returnedUpddatedBlog : blog))
+        setBlogs(updatedBlogs)
+        setSuccessMessage(`Blog ${returnedUpddatedBlog.title} updated`)
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 5000)
+      } else {
+        throw new Error()
+      }
     } catch(exception) {
-      setErrorMessage('Something went wrong... Try again')
+      setErrorMessage('You are not authorized to update this item')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -132,7 +134,7 @@ const App = () => {
             />
           </Togglable>
           {blogs.map(blog =>
-            <Blog key={blog?.id} blog={blog} handleLikeClick={() => handleLikeClick(blog?.id)} />
+            <Blog key={blog.id} blog={blog} handleBlogUpdate={handleBlogUpdate} />
           )}
         </div>
     }
