@@ -17,3 +17,10 @@ Content-Type: application/json
     "username": "axda",
     "password": "axda"
 }
+###
+
+
+DELETE http://localhost:3003/api/blogs/645a1c14142f5a8704a2acdf
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImF4ZGEiLCJpZCI6IjY0NDkyZTlhZjNjNDc5MzYwMzU0MGM4ZCIsImlhdCI6MTY4MzI5NTA3M30.HolYWYq1r2v0nVCsQStb3XxdARAINKCeO4I37-G1SX8
+###
+
