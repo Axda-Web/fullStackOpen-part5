@@ -14,7 +14,7 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [successMessage, setSuccessMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [user, setUser] = useState(null)
 
@@ -23,7 +23,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -109,16 +109,16 @@ const App = () => {
 
   const handleBlogDelete = async (blogToRemove) => {
     if (!window.confirm(`Remove blog ${blogToRemove.title} by ${blogToRemove.author}`)) {
-      return;
+      return
     }
     try {
       await blogService.remove(blogToRemove.id, blogService.setToken(user.token))
       const updatedBlogs = blogs.filter(blog => blog.id !== blogToRemove.id)
       setBlogs(updatedBlogs)
       setSuccessMessage(`Blog ${blogToRemove.title} deleted`)
-        setTimeout(() => {
-          setSuccessMessage(null)
-        }, 5000)
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 5000)
     } catch(exception) {
       setErrorMessage('Something went wrong... Try again')
       setTimeout(() => {
@@ -130,7 +130,7 @@ const App = () => {
 
   return (
     <>
-      { !user 
+      { !user
         ?
         <LoginForm
           username={username}
@@ -163,7 +163,7 @@ const App = () => {
             />
           )}
         </div>
-    }
+      }
     </>
   )
 }
