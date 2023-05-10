@@ -1,7 +1,7 @@
-import { useState } from "react"
+import { useState } from 'react'
 
-const Blog = ({blog, handleBlogUpdate, handleBlogDelete, showRemoveBtn}) => {
-  
+const Blog = ({ blog, handleBlogUpdate, handleBlogDelete, showRemoveBtn }) => {
+
   const [showDetails, setShowDetails] = useState(false)
 
   const blogStyle = {
@@ -21,30 +21,30 @@ const Blog = ({blog, handleBlogUpdate, handleBlogDelete, showRemoveBtn}) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className="blog">
       {!showDetails ?
-      <div>
-        {blog.title}
-        {blog.author}
-        <button style={{marginLeft: 10}} onClick={() => setShowDetails(!showDetails)}>{showDetails ? 'hide' : 'view'}</button>
-      </div> 
-      :
-      <div>
-        {blog.title}
-        <button style={{marginLeft: 10}} onClick={() => setShowDetails(!showDetails)}>{showDetails ? 'hide' : 'view'}</button>
-        <br />
-        {blog.url}
-        <br />
-        {blog.likes}
-        <button style={{marginLeft: 10}} onClick={handleLikeClick}>like</button>
-        <br />
-        {blog.author}
-        <br />
-        {showRemoveBtn && <button onClick={() => handleBlogDelete(blog)}>Remove</button>}
-      </div>
-      
+        <div>
+          {blog.title}
+          {blog.author}
+          <button style={{ marginLeft: 10 }} onClick={() => setShowDetails(!showDetails)}>{showDetails ? 'hide' : 'view'}</button>
+        </div>
+        :
+        <div>
+          {blog.title}
+          <button style={{ marginLeft: 10 }} onClick={() => setShowDetails(!showDetails)}>{showDetails ? 'hide' : 'view'}</button>
+          <br />
+          {blog.url}
+          <br />
+          {blog.likes}
+          <button style={{ marginLeft: 10 }} onClick={handleLikeClick}>like</button>
+          <br />
+          {blog.author}
+          <br />
+          {showRemoveBtn && <button onClick={() => handleBlogDelete(blog)}>Remove</button>}
+        </div>
+
       }
-    </div> 
+    </div>
   )
 }
 
