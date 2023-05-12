@@ -14,6 +14,29 @@ describe('Blog app', function() {
     cy.contains('Log in to application')
   })
 
+  describe('Login',function() {
+    it('succeeds with correct credentials', function() {
+      cy.get('#username-input').type('axda')
+      cy.get('#password-input').type('axda')
+      cy.get('#login-button').click()
+
+      cy.contains('axda logged in')
+    })
+
+    it('fails with wrong credentials', function() {
+      cy.get('#username-input').type('axda')
+      cy.get('#password-input').type('wrongpassword')
+      cy.get('#login-button').click()
+
+      cy.get('.notification--error')
+        .should('contain', 'Wrong username or password')
+        .and('have.css', 'color', 'rgb(255, 0, 0)')
+        .and('have.css', 'border-style', 'solid')
+
+      cy.get('html').should('not.contain', 'axda logged in')
+    })
+  })
+
   describe('When logged in', function() {
     beforeEach(function() {
       cy.login({ username: 'axda', password: 'axda' })
