@@ -63,17 +63,20 @@ describe('Blog app', function() {
         cy.createBlog({
           title: 'My first blog with cypress',
           author: 'Axda',
-          url: 'http://axda.com/blogs/1'
+          url: 'http://axda.com/blogs/1',
+          likes: 3
         }),
         cy.createBlog({
           title: 'My second blog with cypress',
           author: 'Axda',
-          url: 'http://axda.com/blogs/2'
+          url: 'http://axda.com/blogs/2',
+          likes: 2
         }),
         cy.createBlog({
           title: 'My third blog with cypress',
           author: 'Axda',
-          url: 'http://axda.com/blogs/3'
+          url: 'http://axda.com/blogs/3',
+          likes: 1
         })
       })
 
@@ -81,7 +84,7 @@ describe('Blog app', function() {
         cy.contains('My third blog with cypress').parent().find('button').as('viewButton')
         cy.get('@viewButton').click()
         cy.get('#like-button').click()
-        cy.get('#likes-count').should('contain', '1')
+        cy.get('#likes-count').should('contain', '2')
       })
 
       it('one of those can be deleted', function () {
@@ -96,6 +99,12 @@ describe('Blog app', function() {
         cy.contains('My first blog with cypress').parent().find('button').as('viewButton')
         cy.get('@viewButton').click()
         cy.get('#remove-button').should('not.exist')
+      })
+
+      it('blogs are ordered according to likes', function () {
+        cy.get('.blog').eq(0).should('contain', 'My first blog with cypress')
+        cy.get('.blog').eq(1).should('contain', 'My second blog with cypress')
+        cy.get('.blog').eq(2).should('contain', 'My third blog with cypress')
       })
     })
   })
