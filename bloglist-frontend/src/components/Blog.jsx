@@ -40,7 +40,7 @@ const Blog = ({ blog, handleBlogUpdate, handleBlogDelete, showRemoveBtn }) => {
           <br />
           {blog.author}
           <br />
-          {showRemoveBtn && <button onClick={() => handleBlogDelete(blog)}>Remove</button>}
+          {showRemoveBtn && <button id="remove-button" onClick={() => handleBlogDelete(blog)}>Remove</button>}
         </div>
 
       }

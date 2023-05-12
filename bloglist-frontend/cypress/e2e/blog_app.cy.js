@@ -6,7 +6,14 @@ describe('Blog app', function() {
       username: 'axda',
       password: 'axda'
     }
+
+    const user2 = {
+      name: 'Oly',
+      username: 'oly',
+      password: 'oly'
+    }
     cy.request('POST', `${Cypress.env('BACKEND')}/users/`, user)
+    cy.request('POST', `${Cypress.env('BACKEND')}/users/`, user2)
     cy.visit('')
   })
 
@@ -75,6 +82,20 @@ describe('Blog app', function() {
         cy.get('@viewButton').click()
         cy.get('#like-button').click()
         cy.get('#likes-count').should('contain', '1')
+      })
+
+      it('one of those can be deleted', function () {
+        cy.contains('My second blog with cypress').parent().find('button').as('viewButton')
+        cy.get('@viewButton').click()
+        cy.get('#remove-button').click()
+        cy.contains('Blog My second blog with cypress deleted')
+      })
+
+      it('only the creator can see the delete button of a blog', function () {
+        cy.login({ username: 'oly', password: 'oly' })
+        cy.contains('My first blog with cypress').parent().find('button').as('viewButton')
+        cy.get('@viewButton').click()
+        cy.get('#remove-button').should('not.exist')
       })
     })
   })
