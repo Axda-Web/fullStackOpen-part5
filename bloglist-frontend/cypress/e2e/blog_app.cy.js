@@ -50,5 +50,32 @@ describe('Blog app', function() {
       })
       cy.contains('My first blog with cypress')
     })
+
+    describe('and several blogs exist', function () {
+      beforeEach(function () {
+        cy.createBlog({
+          title: 'My first blog with cypress',
+          author: 'Axda',
+          url: 'http://axda.com/blogs/1'
+        }),
+        cy.createBlog({
+          title: 'My second blog with cypress',
+          author: 'Axda',
+          url: 'http://axda.com/blogs/2'
+        }),
+        cy.createBlog({
+          title: 'My third blog with cypress',
+          author: 'Axda',
+          url: 'http://axda.com/blogs/3'
+        })
+      })
+
+      it('one of those can be liked', function () {
+        cy.contains('My third blog with cypress').parent().find('button').as('viewButton')
+        cy.get('@viewButton').click()
+        cy.get('#like-button').click()
+        cy.get('#likes-count').should('contain', '1')
+      })
+    })
   })
 })

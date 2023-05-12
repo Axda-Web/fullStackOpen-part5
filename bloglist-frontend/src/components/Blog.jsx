@@ -35,8 +35,8 @@ const Blog = ({ blog, handleBlogUpdate, handleBlogDelete, showRemoveBtn }) => {
           <br />
           {blog.url}
           <br />
-          {blog.likes}
-          <button style={{ marginLeft: 10 }} onClick={handleLikeClick}>like</button>
+          <span id="likes-count">{blog.likes}</span>
+          <button id="like-button" style={{ marginLeft: 10 }} onClick={handleLikeClick}>like</button>
           <br />
           {blog.author}
           <br />
