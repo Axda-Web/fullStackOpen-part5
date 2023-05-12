@@ -1,0 +1,9 @@
+# Create a new token for Tom
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+    "username": "tester",
+    "password": "tester"
+}
+###
